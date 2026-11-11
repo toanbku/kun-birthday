@@ -498,109 +498,254 @@
 
   /* ------------------------------------------------ gấu bông */
 
-  function drawTeddy(ctx, cx, bottom, h, c) {
+  function drawTeddy(ctx, cx, bottom, h, c, crownColor) {
     const u = h;
-    const headR = u * 0.212;
-    const headY = bottom - u * 0.7;
-    const bodyY = bottom - u * 0.29;
-    const bw = u * 0.232;
-    const bh = u * 0.222;
 
-    const silhouette = (fill) => {
+    // Tỉ lệ chibi gấu bông ngồi: đầu tròn bầu bĩnh, không cổ, ngồi trực tiếp lên thân
+    const headRx = u * 0.235;
+    const headRy = u * 0.205;
+    const headY = bottom - u * 0.58;
+
+    const bodyY = bottom - u * 0.27;
+    const bw = u * 0.235;
+    const bh = u * 0.215;
+
+    const earX = u * 0.165;
+    const earY = headY - u * 0.155;
+    const earR = u * 0.082;
+
+    const footX = u * 0.115;
+    const footY = bottom - u * 0.065;
+    const footRx = u * 0.095;
+    const footRy = u * 0.075;
+
+    const armX = u * 0.175;
+    const armY = bodyY - u * 0.015;
+    const armRx = u * 0.072;
+    const armRy = u * 0.096;
+
+    // Vương miện nhỏ đội nghiêng duyên dáng
+    const crownX = cx + u * 0.012;
+    const crownBottom = headY - headRy + u * 0.038;
+    const crownW = u * 0.255;
+    const crownH = u * 0.165;
+    const crownRot = -0.09;
+
+    const drawCrownShape = (fill, strokeWidth = 0, strokeColor = null) => {
+      ctx.save();
+      ctx.translate(crownX, crownBottom);
+      ctx.rotate(crownRot);
+      ctx.translate(-crownX, -crownBottom);
+
+      crownPath(ctx, crownX, crownBottom - crownH * 0.24, crownW, crownH * 0.76);
+      if (strokeWidth > 0 && strokeColor) {
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+      }
       ctx.fillStyle = fill;
-      ellipse(ctx, cx - u * 0.163, headY - u * 0.152, u * 0.088, u * 0.086);
       ctx.fill();
-      ellipse(ctx, cx + u * 0.163, headY - u * 0.152, u * 0.088, u * 0.086);
+
+      // Vành mũ
+      roundRect(ctx, crownX - crownW / 2, crownBottom - crownH * 0.3, crownW, crownH * 0.3, crownH * 0.12);
+      if (strokeWidth > 0 && strokeColor) {
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.stroke();
+      }
       ctx.fill();
-      ellipse(ctx, cx - u * 0.212, bodyY - u * 0.055, u * 0.078, u * 0.104, 0.22);
+
+      // Chóp tròn 3 đỉnh vương miện hoàng tử
+      const tip = crownW * 0.06;
+      circle(ctx, crownX, crownBottom - crownH, tip);
+      if (strokeWidth > 0 && strokeColor) {
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.stroke();
+      }
       ctx.fill();
-      ellipse(ctx, cx + u * 0.212, bodyY - u * 0.055, u * 0.078, u * 0.104, -0.22);
+
+      circle(ctx, crownX - crownW * 0.44, crownBottom - crownH * 0.88, tip * 0.78);
+      if (strokeWidth > 0 && strokeColor) {
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.stroke();
+      }
       ctx.fill();
-      ellipse(ctx, cx - u * 0.125, bottom - u * 0.062, u * 0.108, u * 0.082);
+
+      circle(ctx, crownX + crownW * 0.44, crownBottom - crownH * 0.88, tip * 0.78);
+      if (strokeWidth > 0 && strokeColor) {
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.stroke();
+      }
       ctx.fill();
-      ellipse(ctx, cx + u * 0.125, bottom - u * 0.062, u * 0.108, u * 0.082);
+
+      ctx.restore();
+    };
+
+    const drawSilhouette = (fill, strokeWidth = 0, strokeColor = null) => {
+      ctx.fillStyle = fill;
+      if (strokeWidth > 0 && strokeColor) {
+        ctx.strokeStyle = strokeColor;
+        ctx.lineWidth = strokeWidth;
+        ctx.lineJoin = 'round';
+        ctx.lineCap = 'round';
+      }
+
+      // Tai
+      circle(ctx, cx - earX, earY, earR);
+      if (strokeWidth) ctx.stroke();
       ctx.fill();
+      circle(ctx, cx + earX, earY, earR);
+      if (strokeWidth) ctx.stroke();
+      ctx.fill();
+
+      // Vương miện (bao trùm trong viền sticker)
+      drawCrownShape(fill, strokeWidth, strokeColor);
+
+      // Chân
+      ellipse(ctx, cx - footX, footY, footRx, footRy, 0.06);
+      if (strokeWidth) ctx.stroke();
+      ctx.fill();
+      ellipse(ctx, cx + footX, footY, footRx, footRy, -0.06);
+      if (strokeWidth) ctx.stroke();
+      ctx.fill();
+
+      // Thân tròn
       ellipse(ctx, cx, bodyY, bw, bh);
+      if (strokeWidth) ctx.stroke();
       ctx.fill();
-      circle(ctx, cx, headY, headR);
+
+      // Tay ôm
+      ellipse(ctx, cx - armX, armY, armRx, armRy, 0.38);
+      if (strokeWidth) ctx.stroke();
+      ctx.fill();
+      ellipse(ctx, cx + armX, armY, armRx, armRy, -0.38);
+      if (strokeWidth) ctx.stroke();
+      ctx.fill();
+
+      // Đầu gấu (ngồi sát lên thân, không hề có cổ)
+      ellipse(ctx, cx, headY, headRx, headRy);
+      if (strokeWidth) ctx.stroke();
       ctx.fill();
     };
 
-    // bóng đổ
+    // Bóng đổ dưới sàn
     ctx.save();
-    ctx.globalAlpha = 0.16;
-    ctx.fillStyle = '#4a2f18';
-    ellipse(ctx, cx, bottom - u * 0.012, u * 0.27, u * 0.022);
+    ctx.globalAlpha = 0.15;
+    ctx.fillStyle = '#3a2210';
+    ellipse(ctx, cx, bottom - u * 0.012, u * 0.28, u * 0.024);
     ctx.fill();
     ctx.restore();
 
-    // viền sticker
-    ctx.save();
-    ctx.translate(cx, bottom);
-    ctx.scale(1.06, 1.06);
-    ctx.translate(-cx, -bottom);
-    silhouette(c.halo);
-    ctx.restore();
+    // Viền sticker trắng die-cut đều mọi góc 8px
+    drawSilhouette(c.halo, u * 0.075, c.halo);
 
-    silhouette(c.fur);
+    // Thân và đầu gấu bông
+    drawSilhouette(c.fur);
 
-    // tai trong
+    // Vương miện màu accent theo theme
+    drawCrownShape(crownColor || '#c9a268');
+
+    // Tai trong màu kem
     ctx.fillStyle = c.muzzle;
-    ellipse(ctx, cx - u * 0.163, headY - u * 0.152, u * 0.044, u * 0.043);
+    circle(ctx, cx - earX, earY, earR * 0.58);
     ctx.fill();
-    ellipse(ctx, cx + u * 0.163, headY - u * 0.152, u * 0.044, u * 0.043);
-    ctx.fill();
-
-    // bụng
-    ctx.fillStyle = 'rgba(255, 247, 231, .38)';
-    ellipse(ctx, cx, bodyY + u * 0.015, bw * 0.6, bh * 0.6);
+    circle(ctx, cx + earX, earY, earR * 0.58);
     ctx.fill();
 
-    // mõm
+    // Bụng mềm màu sáng
+    ctx.fillStyle = 'rgba(255, 248, 235, 0.45)';
+    ellipse(ctx, cx, bodyY + u * 0.02, bw * 0.58, bh * 0.52);
+    ctx.fill();
+
+    // Cánh tay nổi phía trước ôm bụng
+    ctx.fillStyle = c.fur;
+    ellipse(ctx, cx - armX * 0.95, armY, armRx * 0.92, armRy * 0.95, 0.38);
+    ctx.fill();
+    ellipse(ctx, cx + armX * 0.95, armY, armRx * 0.92, armRy * 0.95, -0.38);
+    ctx.fill();
+
+    // Bàn tay tròn bụ bẫm đặt lên bụng
+    circle(ctx, cx - u * 0.1, armY + u * 0.046, u * 0.038);
+    ctx.fill();
+    circle(ctx, cx + u * 0.1, armY + u * 0.046, u * 0.038);
+    ctx.fill();
+
+    // Đệm chân hình hạt đậu màu kem
     ctx.fillStyle = c.muzzle;
-    ellipse(ctx, cx, headY + u * 0.058, u * 0.105, u * 0.08);
+    ellipse(ctx, cx - footX, footY + u * 0.005, footRx * 0.6, footRy * 0.55);
+    ctx.fill();
+    ellipse(ctx, cx + footX, footY + u * 0.005, footRx * 0.6, footRy * 0.55);
     ctx.fill();
 
-    // mũi
+    // Mõm tròn cưng
+    ctx.fillStyle = c.muzzle;
+    ellipse(ctx, cx, headY + u * 0.055, u * 0.105, u * 0.078);
+    ctx.fill();
+
+    // Mũi hạt sôcôla
     ctx.fillStyle = c.nose;
-    ellipse(ctx, cx, headY + u * 0.008, u * 0.036, u * 0.026);
+    ellipse(ctx, cx, headY + u * 0.02, u * 0.036, u * 0.024);
     ctx.fill();
 
-    // miệng
+    // Miệng cười ngọt ngào :3
     ctx.strokeStyle = c.nose;
     ctx.lineWidth = u * 0.012;
     ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
     ctx.beginPath();
     ctx.moveTo(cx, headY + u * 0.032);
-    ctx.quadraticCurveTo(cx - u * 0.008, headY + u * 0.062, cx - u * 0.038, headY + u * 0.056);
-    ctx.moveTo(cx, headY + u * 0.032);
-    ctx.quadraticCurveTo(cx + u * 0.008, headY + u * 0.062, cx + u * 0.038, headY + u * 0.056);
+    ctx.lineTo(cx, headY + u * 0.052);
+    ctx.quadraticCurveTo(cx - u * 0.02, headY + u * 0.076, cx - u * 0.042, headY + u * 0.062);
+    ctx.moveTo(cx, headY + u * 0.052);
+    ctx.quadraticCurveTo(cx + u * 0.02, headY + u * 0.076, cx + u * 0.042, headY + u * 0.062);
     ctx.stroke();
 
-    // mắt
-    ctx.fillStyle = c.nose;
-    circle(ctx, cx - u * 0.082, headY - u * 0.032, u * 0.019);
+    // Má hồng đào 2 bên
+    ctx.save();
+    ctx.fillStyle = 'rgba(235, 120, 110, 0.45)';
+    circle(ctx, cx - u * 0.125, headY + u * 0.046, u * 0.038);
     ctx.fill();
-    circle(ctx, cx + u * 0.082, headY - u * 0.032, u * 0.019);
+    circle(ctx, cx + u * 0.125, headY + u * 0.046, u * 0.038);
+    ctx.fill();
+    ctx.restore();
+
+    // Mắt long lanh có đốm sáng phản chiếu
+    const eyeX = u * 0.082;
+    const eyeY = headY - u * 0.015;
+    const eyeR = u * 0.022;
+    ctx.fillStyle = c.nose;
+    circle(ctx, cx - eyeX, eyeY, eyeR);
+    ctx.fill();
+    circle(ctx, cx + eyeX, eyeY, eyeR);
     ctx.fill();
 
-    // nơ cổ
-    const by = headY + headR * 1.1;
-    const bwid = u * 0.082;
+    ctx.fillStyle = '#ffffff';
+    circle(ctx, cx - eyeX + u * 0.007, eyeY - u * 0.007, eyeR * 0.42);
+    ctx.fill();
+    circle(ctx, cx + eyeX + u * 0.007, eyeY - u * 0.007, eyeR * 0.42);
+    ctx.fill();
+
+    // Nơ cổ ôm khít ngay dưới cằm
+    const by = headY + headRy * 0.88;
+    const bwid = u * 0.076;
     ctx.fillStyle = c.bow;
     ctx.beginPath();
     ctx.moveTo(cx, by);
-    ctx.lineTo(cx - bwid, by - bwid * 0.66);
-    ctx.lineTo(cx - bwid, by + bwid * 0.66);
+    ctx.lineTo(cx - bwid, by - bwid * 0.6);
+    ctx.lineTo(cx - bwid, by + bwid * 0.6);
     ctx.closePath();
     ctx.fill();
     ctx.beginPath();
     ctx.moveTo(cx, by);
-    ctx.lineTo(cx + bwid, by - bwid * 0.66);
-    ctx.lineTo(cx + bwid, by + bwid * 0.66);
+    ctx.lineTo(cx + bwid, by - bwid * 0.6);
+    ctx.lineTo(cx + bwid, by + bwid * 0.6);
     ctx.closePath();
     ctx.fill();
-    circle(ctx, cx, by, u * 0.022);
+    circle(ctx, cx, by, u * 0.024);
     ctx.fill();
   }
 
@@ -858,8 +1003,7 @@
     const tCx = 112;
     const tBottom = 942;
     const tH = 172;
-    drawTeddy(ctx, tCx, tBottom, tH, teddy);
-    drawCrown(ctx, tCx + 2, tBottom - tH * 0.895, 46, 30, p.line, -0.1);
+    drawTeddy(ctx, tCx, tBottom, tH, teddy, p.line);
 
     /* ---------- hoa văn ---------- */
     ctx.fillStyle = p.star;
