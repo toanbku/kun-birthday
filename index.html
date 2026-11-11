@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Thiệp thôi nôi · Kun tròn 1 tuổi</title>
+<meta name="description" content="Tự tay tạo thiệp mời tiệc thôi nôi cho bé yêu — chọn ảnh, điền tên khách, tải về ảnh in hoặc gửi từng người." />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.92em' font-size='88'%3E%F0%9F%8E%82%3C/text%3E%3C/svg%3E" />
+<link rel="stylesheet" href="assets/fonts.css" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">
+    <span class="brand__badge">1</span>
+    <div class="brand__text">
+      <h1>Thiệp thôi nôi</h1>
+      <p id="brandSub">Quang Kiên · 21.11.2026</p>
+    </div>
+  </div>
+  <div class="topbar__right">
+    <span class="save-hint" id="saveHint">Đã lưu tự động</span>
+    <button class="btn btn--ghost" id="resetBtn" type="button">Đặt lại</button>
+    <button class="btn btn--primary" id="downloadBtn" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 17.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/></svg>
+      Tải thiệp
+    </button>
+  </div>
+</header>
+
+<main class="app">
+
+  <section class="stage" aria-label="Xem trước thiệp">
+    <div class="stage__paper">
+      <canvas id="card" width="1080" height="1620" role="img" aria-label="Thiệp mời thôi nôi"></canvas>
+    </div>
+    <p class="stage__hint">Kích thước in gợi ý: 10 × 15 cm · Tỉ lệ 2:3</p>
+  </section>
+
+  <aside class="editor">
+
+    <section class="group group--top">
+      <h2 class="group__title">Khách được mời</h2>
+      <div class="field">
+        <label for="f-guest">Tên khách <span class="muted">(in trên thiệp)</span></label>
+        <input id="f-guest" data-k="guest" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="f-guestLabel">Lời mời</label>
+        <input id="f-guestLabel" data-k="guestLabel" type="text" autocomplete="off" />
+      </div>
+      <p class="field-hint">Ví dụ: <em>Kính mời</em> + <em>Anh Nguyễn Văn An</em> → “Kính mời Anh Nguyễn Văn An đến dự…”</p>
+    </section>
+
+    <section class="group">
+      <h2 class="group__title">Thông tin bé</h2>
+      <div class="field">
+        <label for="f-name">Tên bé</label>
+        <input id="f-name" data-k="name" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="f-nick">Tên gọi ở nhà</label>
+        <input id="f-nick" data-k="nick" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="f-topLine">Dòng chữ nhỏ phía trên</label>
+        <input id="f-topLine" data-k="topLine" type="text" autocomplete="off" />
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group__title">Thời gian &amp; địa điểm</h2>
+      <div class="row row--3">
+        <div class="field">
+          <label for="f-weekday">Thứ</label>
+          <input id="f-weekday" data-k="weekday" type="text" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="f-date">Ngày</label>
+          <input id="f-date" data-k="date" type="text" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label for="f-time">Giờ</label>
+          <input id="f-time" data-k="time" type="text" autocomplete="off" />
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-venue">Tên địa điểm</label>
+        <input id="f-venue" data-k="venue" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="f-address">Địa chỉ</label>
+        <input id="f-address" data-k="address" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="f-mapUrl">Link Google Maps <span class="muted">(in thành mã QR)</span></label>
+        <input id="f-mapUrl" data-k="mapUrl" type="text" spellcheck="false" autocomplete="off" />
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group__title">Lời mời &amp; câu kết</h2>
+      <div class="field">
+        <label for="f-kicker">Câu mời phụ</label>
+        <input id="f-kicker" data-k="kicker" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="f-message">Lời nhắn <span class="muted">(một dòng)</span></label>
+        <input id="f-message" data-k="message" type="text" autocomplete="off" />
+      </div>
+      <div class="field">
+        <label for="f-farewell">Câu kết</label>
+        <input id="f-farewell" data-k="farewell" type="text" autocomplete="off" />
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group__title">Ảnh của bé</h2>
+      <label class="dropzone" id="dropzone" for="f-photo">
+        <img id="thumb" alt="" />
+        <span class="dropzone__text">
+          <strong>Chọn ảnh khác</strong>
+          <small>Kéo thả hoặc bấm để tải ảnh lên</small>
+        </span>
+        <input id="f-photo" type="file" accept="image/*" hidden />
+      </label>
+      <div class="field field--slider">
+        <label for="f-zoom">Thu phóng ảnh</label>
+        <input id="f-zoom" data-k="photoZoom" data-num type="range" min="1" max="1.6" step="0.01" />
+      </div>
+      <div class="field field--slider">
+        <label for="f-photoY">Dịch ảnh lên / xuống</label>
+        <input id="f-photoY" data-k="photoY" data-num type="range" min="0" max="1" step="0.01" />
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group__title">Bảng màu</h2>
+      <div class="palettes" id="palettes">
+        <button class="palette" data-palette="choco" type="button">
+          <span class="palette__dots"><i style="background:#F8EBD2"></i><i style="background:#6B4A2C"></i><i style="background:#C9A268"></i></span>
+          Kem nâu
+        </button>
+        <button class="palette" data-palette="blush" type="button">
+          <span class="palette__dots"><i style="background:#FBE9E2"></i><i style="background:#8A4B44"></i><i style="background:#D9A396"></i></span>
+          Hồng đào
+        </button>
+        <button class="palette" data-palette="sage" type="button">
+          <span class="palette__dots"><i style="background:#EAF0E2"></i><i style="background:#4E6047"></i><i style="background:#A9BE99"></i></span>
+          Xanh bơ
+        </button>
+      </div>
+    </section>
+
+    <section class="group">
+      <h2 class="group__title">Gửi riêng từng khách</h2>
+      <p class="field-hint">Dán danh sách, mỗi dòng một khách — mỗi người nhận một thiệp có tên riêng.</p>
+      <div class="field">
+        <label for="f-guestList">Danh sách khách <span class="muted" id="guestCount"></span></label>
+        <textarea id="f-guestList" data-k="guestList" rows="4" placeholder="Anh Nguyễn Văn An&#10;Gia đình chị Lan&#10;Chị Thu Hà&#10;Cô Bảy"></textarea>
+      </div>
+      <button class="btn btn--soft btn--block" id="batchBtn" type="button">Tạo thiệp cho từng khách (.zip)</button>
+      <div class="progress" id="batchProgress" hidden>
+        <div class="progress__track"><i id="batchBar"></i></div>
+        <p class="muted center" id="batchStatus">Đang tạo…</p>
+      </div>
+    </section>
+
+    <section class="group group--export">
+      <h2 class="group__title">Xuất thiệp</h2>
+      <div class="segmented" id="resolution">
+        <button type="button" data-size="1" class="is-active">1× · 1080×1620</button>
+        <button type="button" data-size="2">2× · 2160×3240</button>
+      </div>
+      <button class="btn btn--primary btn--block" id="downloadBtnBottom" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 17.5V19a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1.5"/></svg>
+        Tải thiệp PNG
+      </button>
+      <button class="btn btn--soft btn--block" id="shareBtn" type="button" hidden>Chia sẻ qua Zalo / Messenger</button>
+      <p class="muted center">Ảnh được tạo ngay trên máy anh, không tải lên máy chủ nào.</p>
+    </section>
+
+    <p class="credit">Làm bằng cả yêu thương cho Kun ♥</p>
+  </aside>
+</main>
+
+<script src="assets/qr.js"></script>
+<script src="assets/photo-data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
