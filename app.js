@@ -759,16 +759,7 @@
     ctx.fill();
     ctx.restore();
 
-    ctx.save();
-    ctx.setLineDash([16, 13]);
-    ctx.lineJoin = 'round';
-    ctx.lineCap = 'round';
-    ctx.lineWidth = 3;
-    ctx.strokeStyle = p.line;
-    ctx.globalAlpha = 0.85;
-    panelPath(ctx, PANEL_BASE, 26, H - 62);
-    ctx.stroke();
-    ctx.restore();
+    /* (đường viền nét đứt cũ bị lệch hình học so với viền lượn sóng) */
 
     /* ---------- gingham ---------- */
     ctx.save();
