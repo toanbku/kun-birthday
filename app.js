@@ -776,15 +776,16 @@
     ctx.clip();
     ctx.fillStyle = p.gingham;
     const cell = 27;
+    const cols = Math.ceil(W / cell);
     for (let j = 0; j < 2; j++) {
-      for (let i = 0; i < 35; i++) {
+      for (let i = 0; i < cols; i++) {
         if ((i + j) % 2 === 0) {
           ctx.globalAlpha = 0.34;
           ctx.fillRect(i * cell, H - 54 + j * cell, cell, cell);
         }
       }
     }
-    for (let i = 0; i < 35; i += 2) {
+    for (let i = 0; i < cols; i += 2) {
       ctx.globalAlpha = 0.12;
       ctx.fillRect(i * cell, H - 54, cell, 54);
     }
