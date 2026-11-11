@@ -180,6 +180,60 @@
     ctx.closePath();
   }
 
+  function drawDashedPanelStitch(ctx, p) {
+    const d = 16;
+    const bY = PANEL_BASE + d;
+    const inset = 26;
+    const xLeft = inset;
+    const xRight = W - inset;
+    const bottomY = H - 64;
+    const radius = 14;
+
+    const b0 = BUMPS[0];
+    const cx0 = (b0.x0 + b0.x1) / 2;
+    const rx0 = (b0.x1 - b0.x0) / 2;
+    const thetaL = Math.PI * 2 - Math.acos(Math.max(-1, Math.min(1, (xLeft - cx0) / rx0)));
+
+    const bLast = BUMPS[BUMPS.length - 1];
+    const cxLast = (bLast.x0 + bLast.x1) / 2;
+    const rxLast = (bLast.x1 - bLast.x0) / 2;
+    const thetaR = Math.PI * 2 - Math.acos(Math.max(-1, Math.min(1, (xRight - cxLast) / rxLast)));
+
+    const startY = bY + b0.ry * Math.sin(thetaL);
+
+    ctx.save();
+    ctx.setLineDash([14, 11]);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 2.4;
+    ctx.strokeStyle = p.line;
+    ctx.globalAlpha = 0.85;
+
+    ctx.beginPath();
+    ctx.moveTo(xLeft, bottomY - radius);
+    ctx.lineTo(xLeft, startY);
+
+    ctx.ellipse(cx0, bY, rx0, b0.ry, 0, thetaL, Math.PI * 2);
+
+    for (let i = 1; i < BUMPS.length - 1; i++) {
+      const b = BUMPS[i];
+      const cx = (b.x0 + b.x1) / 2;
+      const rx = (b.x1 - b.x0) / 2;
+      ctx.ellipse(cx, bY, rx, b.ry, 0, Math.PI, Math.PI * 2);
+    }
+
+    ctx.ellipse(cxLast, bY, rxLast, bLast.ry, 0, Math.PI, thetaR);
+
+    ctx.lineTo(xRight, bottomY - radius);
+    ctx.quadraticCurveTo(xRight, bottomY, xRight - radius, bottomY);
+    ctx.lineTo(xLeft + radius, bottomY);
+    ctx.quadraticCurveTo(xLeft, bottomY, xLeft, bottomY - radius);
+    ctx.closePath();
+
+    ctx.stroke();
+    ctx.restore();
+  }
+
   function setLS(ctx, v) {
     if (lsOK === null) lsOK = 'letterSpacing' in ctx;
     if (lsOK) ctx.letterSpacing = v;
@@ -759,7 +813,8 @@
     ctx.fill();
     ctx.restore();
 
-    /* (đường viền nét đứt cũ bị lệch hình học so với viền lượn sóng) */
+    /* ---------- viền nét đứt chuẩn hình học ---------- */
+    drawDashedPanelStitch(ctx, p);
 
     /* ---------- gingham ---------- */
     ctx.save();
