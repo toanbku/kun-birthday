@@ -228,7 +228,7 @@ body {
   width: auto;
   max-width: 100%;
   border-radius: 13px;
-  background: #f8ebd2;
+  background: #edf1e5;
   cursor: default;
 }
 
@@ -487,7 +487,7 @@ body {
 }
 
 /* bare preview mode (?bare) */
-body.is-bare { background: #f8ebd2; display: block; overflow: hidden; }
+body.is-bare { background: #edf1e5; display: block; overflow: hidden; }
 body.is-bare .topbar,
 body.is-bare .editor,
 body.is-bare .stage__hint { display: none; }

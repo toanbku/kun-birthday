@@ -101,7 +101,7 @@
     message: 'Sự hiện diện của quý khách là niềm vui lớn của gia đình!',
     farewell: 'Rất hân hạnh được đón tiếp!',
     guestList: '',
-    palette: 'choco',
+    palette: 'sage',
     photo: null,
     photoZoom: 1,
     photoY: 0.4,
@@ -119,10 +119,11 @@
   if (saved && typeof saved === 'object') Object.assign(state, saved);
   if (state.time === '19h00') state.time = '18h30';
   if (state.kicker === 'đến dự buổi tiệc thôi nôi cùng bé') state.kicker = 'Tham dự buổi tiệc thôi nôi cùng bé';
+  if (state.palette === 'choco') state.palette = 'sage';
   if (!state.photo) state.photo = DEFAULT_PHOTO;
   state.photoZoom = Number(state.photoZoom) || 1;
   state.photoY = state.photoY === undefined ? 0.4 : Number(state.photoY);
-  if (!PALETTES[state.palette]) state.palette = 'choco';
+  if (!PALETTES[state.palette]) state.palette = 'sage';
 
   let img = null;
   let lsOK = null;
